@@ -13,7 +13,7 @@ function buildPrompt(request: SermonRequest): string {
 الأسلوب: ${request.style || "وعظي مؤثر"}
 مستوى اللغة: ${request.languageLevel || "متوسطة"}
 المناسبة: ${request.occasion || "بدون مناسبة"}
-العناصر المطلوبة: ${Array.isArray(request.elements) ? request.elements.join("، ") : ""}
+العناصر المطلوبة: ${JSON.stringify(request)}
 
 التزم بما يلي:
 1. لا تخترع آيات أو أحاديث أو مصادر.
@@ -68,5 +68,31 @@ async function callGeminiFunction(prompt: string): Promise<string> {
 
 export async function generateSermon(request: SermonRequest): Promise<string> {
   const prompt = buildPrompt(request);
+  return await callGeminiFunction(prompt);
+}
+
+export async function editSermonAction(
+  content: string,
+  action: string
+): Promise<string> {
+  const prompt = `
+أنت مساعد متخصص في تحسين الخطب والمحاضرات الشرعية.
+
+لديك النص التالي:
+
+${content}
+
+المطلوب تنفيذه على النص:
+${action}
+
+التزم بما يلي:
+1. حافظ على المعنى الأصلي.
+2. لا تخترع آيات أو أحاديث أو مصادر.
+3. لا تنسب أقوالًا إلى العلماء بلا تحقق.
+4. حسّن النص بلغة عربية فصيحة ومؤثرة.
+5. أعد النص كاملًا بعد التحسين، وليس مجرد ملاحظات.
+6. إذا أضفت حديثًا أو أثرًا يحتاج تحققًا، فاكتب بجانبه: يحتاج إلى تحقق من درجته قبل استخدامه.
+`;
+
   return await callGeminiFunction(prompt);
 }
