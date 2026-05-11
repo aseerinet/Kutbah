@@ -1,20 +1,32 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# دليل الخطيب
 
-# Run and deploy your AI Studio app
+تطبيق ويب عربي لإعداد الخطب والمحاضرات الشرعية.
 
-This contains everything you need to run your app locally.
+## التشغيل المحلي
 
-View your app in AI Studio: https://ai.studio/apps/18d88f6f-88be-4955-846a-7636e671225d
+```bash
+npm install
+npm run dev
+```
 
-## Run Locally
+للتجربة المحلية مع دالة Netlify الخاصة بالذكاء الاصطناعي، استخدم Netlify CLI:
 
-**Prerequisites:**  Node.js
+```bash
+npm install -g netlify-cli
+netlify dev
+```
 
+ثم أضف المتغير البيئي:
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+```bash
+GEMINI_API_KEY=your_key_here
+```
+
+## النشر على Netlify
+
+- Build command: `npm run build`
+- Publish directory: `dist`
+- Functions directory: `netlify/functions`
+- Environment variable: `GEMINI_API_KEY`
+
+تم نقل اتصال Gemini إلى Netlify Function حتى لا يظهر المفتاح داخل ملفات الواجهة الأمامية.
