@@ -1,5 +1,3 @@
-٥٦const { GoogleGenerativeAI } = require("@google/generative-ai");
-
 exports.handler = async function (event) {
   const headers = {
     "Content-Type": "application/json; charset=utf-8",
@@ -38,7 +36,6 @@ exports.handler = async function (event) {
     }
 
     let body = {};
-
     try {
       body = JSON.parse(event.body || "{}");
     } catch (error) {
@@ -65,22 +62,70 @@ exports.handler = async function (event) {
       };
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
+    const modelName = "gemini-2.5-flash";
 
-    const model = genAI.getGenerativeModel({
-  model: "gemini-2.5-flash",
-});
+    const url =
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent` +
+      `?key=${apiKey}`;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const geminiResponse = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            role: "user",
+            parts: [{ text: prompt }],
+          },
+        ],
+        generationConfig: {
+          temperature: 0.7,
+          maxOutputTokens: 4096,
+        },
+      }),
+    });
+
+    const data = await geminiResponse.json().catch(() => ({}));
+
+    if (!geminiResponse.ok) {
+      return {
+        statusCode: geminiResponse.status,
+        headers,
+        body: JSON.stringify({
+          error: "فشل الاتصال بخدمة Gemini",
+          status: geminiResponse.status,
+          details:
+            data?.error?.message ||
+            data?.error ||
+            data ||
+            "خطأ غير معروف من Gemini",
+        }),
+      };
+    }
+
+    const text =
+      data?.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
+        .join("\n")
+        .trim() || "";
+
+    if (!text) {
+      return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+          error: "وصل رد من Gemini لكنه لا يحتوي على نص",
+          raw: data,
+        }),
+      };
+    }
 
     return {
       statusCode: 200,
       headers,
-      body: JSON.stringify({
-        text,
-      }),
+      body: JSON.stringify({ text }),
     };
   } catch (error) {
     console.error("Gemini function error:", error);
