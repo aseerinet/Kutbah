@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+٥٦const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 exports.handler = async function (event) {
   const headers = {
@@ -66,7 +66,7 @@ exports.handler = async function (event) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-model: "gemini-3.1-flash-lite-preview",
+
     const model = genAI.getGenerativeModel({
       
       model: "gemini-3.1-flash-lite-preview",
