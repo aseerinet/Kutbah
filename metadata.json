@@ -1,0 +1,10 @@
+{
+  "name": "دليل الخطيب",
+  "description": "منصة ذكية لمساعدة الخطباء والدعاة على إعداد الخطب والمحاضرات الشرعية بأسلوب منظم ومؤثر.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "AI-powered sermon generation",
+    "Sermon library management",
+    "RTL Arabic interface"
+  ]
+}

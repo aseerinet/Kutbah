@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Tajawal:wght@300;400;500;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Cairo", "Tajawal", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-primary-dark: #1a4d2e;
+  --color-primary-gold: #c5a044;
+  --color-primary-light: #f4f7f2;
+}
+
+@layer base {
+  body {
+    @apply font-sans bg-gray-50 text-gray-900;
+  }
+}
+
+.sermon-content {
+  line-height: 2;
+}
+
+.sermon-content p {
+  @apply mb-4;
+}
+
+.sermon-content h1, .sermon-content h2, .sermon-content h3 {
+  @apply font-bold text-primary-dark mb-4;
+}
